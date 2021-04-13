@@ -15,6 +15,7 @@
  ******************************************************************************/
 
 dependencies {
+    implementation 'org.jetbrains:annotations-java5:20.1.0'
     compile libraries.lwjgl
 }
 
