@@ -1,7 +1,6 @@
-package com.badlogic.gdx.backends.lwjgl;
+package com.badlogic.gdx.files;
 
 import com.badlogic.gdx.Files;
-import com.badlogic.gdx.files.FileHandle;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,17 +10,17 @@ import java.util.zip.ZipFile;
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-public class LwjglZipFileHandle extends FileHandle {
+public class ZipFileHandle extends FileHandle {
 	 final ZipFile archive;
 	 final ZipEntry archiveEntry;
 
-	 public LwjglZipFileHandle (ZipFile archive, File file) {
+	 public ZipFileHandle (ZipFile archive, File file) {
 		  super(file, Files.FileType.Classpath);
 		  this.archive = archive;
 		  archiveEntry = this.archive.getEntry(file.getPath());
 	 }
 
-	 public LwjglZipFileHandle (ZipFile archive, String fileName) {
+	 public ZipFileHandle (ZipFile archive, String fileName) {
 		  super(fileName.replace('\\', '/'), FileType.Classpath);
 		  this.archive = archive;
 		  this.archiveEntry = archive.getEntry(fileName.replace('\\', '/'));
@@ -30,15 +29,15 @@ public class LwjglZipFileHandle extends FileHandle {
 	 @Override
 	 public FileHandle child (String name) {
 		  name = name.replace('\\', '/');
-		  if (file.getPath().length() == 0) return new LwjglZipFileHandle(archive, new File(name));
-		  return new LwjglZipFileHandle(archive, new File(file, name));
+		  if (file.getPath().length() == 0) return new ZipFileHandle(archive, new File(name));
+		  return new ZipFileHandle(archive, new File(file, name));
 	 }
 
 	 @Override
 	 public FileHandle sibling (String name) {
 		  name = name.replace('\\', '/');
 		  if (file.getPath().length() == 0) throw new GdxRuntimeException("Cannot get the sibling of the root.");
-		  return new LwjglZipFileHandle(archive, new File(file.getParent(), name));
+		  return new ZipFileHandle(archive, new File(file.getParent(), name));
 	 }
 
 	 @Override
@@ -50,7 +49,7 @@ public class LwjglZipFileHandle extends FileHandle {
 				else
 					 parent = new File("");
 		  }
-		  return new LwjglZipFileHandle(archive, parent);
+		  return new ZipFileHandle(archive, parent);
 	 }
 
 	 @Override
