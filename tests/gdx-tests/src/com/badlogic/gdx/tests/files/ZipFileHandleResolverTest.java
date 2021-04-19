@@ -44,7 +44,7 @@ public class ZipFileHandleResolverTest extends GdxTest {
 		  batch = new SpriteBatch();
 
 		  try {
-				ZipFile archive = new ZipFile(Gdx.files.internal("test.zip").file());
+				ZipFile archive = new ZipFile(Gdx.files.internal("tres/test.zip").file());
 				ZipFileHandleResolver resolver = new ZipFileHandleResolver(archive);
 				assetManager = new AssetManager(resolver);
 				assetManager.setLoader(TiledMap.class, new TmxMapLoader(resolver));
