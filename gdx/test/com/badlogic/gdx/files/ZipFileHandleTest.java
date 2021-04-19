@@ -4,6 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Scanner;
 import java.util.zip.ZipFile;
 
 import static org.junit.Assert.assertEquals;
@@ -15,19 +18,16 @@ public class ZipFileHandleTest {
 	 static final String FILES_DIR_PATH = "files";
 	 static final String DIR1_PATH = "files/dir1";
 	 static final String FILE2_NAME = "file2.txt";
+	 static final String FILE1_TEXT = "This is the test textfile #1.";
 
 	 File f;
 	 ZipFile zf;
 	 ZipFileHandle zfh;
 
 	 @Before
-	 public void prepare () {
-	 	 try {
-	 	 	 f = new File(ARCHIVE_PATH);
-	 	 	 zf = new ZipFile(f);
-		 } catch (Exception exc) {
-	 	 	 exc.printStackTrace();
-		 }
+	 public void prepare () throws IOException {
+	 	 f = new File(ARCHIVE_PATH);
+	 	 zf = new ZipFile(f);
 	 }
 
 	 @Test
@@ -55,5 +55,18 @@ public class ZipFileHandleTest {
 	 	 zfh = new ZipFileHandle(zf, DIR1_PATH);
 	 	 FileHandle fh = zfh.parent();
 	 	 assertEquals(FILES_DIR_PATH, fh.path());
+	 }
+
+	 @Test
+	 public void testRead() {
+	 	 zfh = new ZipFileHandle(zf, FILE1_PATH);
+	 	 try (InputStream is = zfh.read()) {
+			  Scanner s = new Scanner(is);
+			  s.useDelimiter("\n");
+			  assertEquals(FILE1_TEXT, s.next());
+			  s.close();
+		 } catch (IOException exc) {
+	 	 	 exc.printStackTrace();
+		 }
 	 }
 }
